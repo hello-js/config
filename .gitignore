@@ -1,0 +1,15 @@
+# System
+.DS_Store
+
+# Logs
+*.log
+
+# Temp
+tmp
+
+# Node
+node_modules
+
+# Coverage
+coverage
+.nyc_output

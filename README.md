@@ -26,9 +26,6 @@ If there is a `./environments/development.local.js` file, this will be merged in
 
 *NOTE:* `*.local.js` should be added to `.gitignore` -- it should only be used for developer-specific settings
 
-
-Once you have initialized the config objec, you can access
-
 ### Recommended directory structure
 
 The recommended directory structure is
