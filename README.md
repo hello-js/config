@@ -19,9 +19,10 @@ hello-config loads environment-specific config files from a directory.
 ### Setup
 
 ```js
+const path = require('path')
 const Config = require('hello-config')
 
-let config = Config.load('./environments')
+let config = Config.load(path.join(__dirname, 'environments'))
 ```
 
 The above code will load `./environments/default.js` and merge in `./environments/development.js` overrides.
@@ -51,9 +52,10 @@ Sample `config/index.js` file:
 ```js
 'use strict'
 
+const path = require('path')
 const Config = require('hello-config')
 
-module.exports = Config.load('./environments')
+module.exports = Config.load(path.join(__dirname, 'environments'))
 ```
 
 Sample `default.js` file:
