@@ -2,8 +2,8 @@
 
 Simple environment-specific configuration for your node apps
 
-[![Build Status](https://img.shields.io/travis/hello-framework/hello-config/master.svg)](https://travis-ci.org/hello-framework/hello-config)
-[![Coverage Status](https://img.shields.io/coveralls/hello-framework/hello-config.svg)](https://coveralls.io/github/hello-framework/hello-config)
+[![Build Status](https://img.shields.io/travis/hello-js/hello-config/master.svg)](https://travis-ci.org/hello-js/hello-config)
+[![Coverage Status](https://img.shields.io/coveralls/hello-js/hello-config.svg)](https://coveralls.io/github/hello-js/hello-config)
 [![Standard - JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ## Installation

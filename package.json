@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Simple environment-specific configuration",
   "main": "lib/index.js",
-  "repository": "https://github.com/hello-framework/hello-config",
+  "repository": "https://github.com/hello-js/hello-config",
   "author": "Matt Venables <mattvenables@gmail.com>",
   "license": "MIT",
   "scripts": {
