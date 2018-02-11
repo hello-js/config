@@ -7,28 +7,35 @@
   "author": "Matt Venables <mattvenables@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/standard && NODE_ENV=test ./node_modules/.bin/nyc --reporter=lcov --reporter=text ./node_modules/.bin/mocha 'test/**/*.spec.js'",
-    "coverage": "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "format": "xo --fix",
+    "lint": "xo",
+    "test": "xo && nyc ava"
   },
-  "standard": {
-    "env": [
-      "mocha"
+  "nyc": {
+    "reporters": [
+      "lcov",
+      "text"
     ]
+  },
+  "xo": {
+    "space": true,
+    "prettier": true,
+    "rules": {
+      "import/order": "off"
+    }
   },
   "engines": {
     "node": ">= 6.0.0"
   },
   "dependencies": {
-    "dotenv": "^4.0.0",
-    "lodash.get": "^4.4.2",
-    "lodash.merge": "^4.6.0",
-    "lodash.set": "^4.3.2"
+    "dotenv": "^5.0.0",
+    "lodash": "^4.17.5"
   },
   "devDependencies": {
-    "chai": "^4.0.0",
-    "coveralls": "^2.13.1",
-    "mocha": "^3.4.2",
-    "nyc": "^10.3.2",
-    "standard": "^10.0.2"
+    "ava": "^0.25.0",
+    "coveralls": "^3.0.0",
+    "nyc": "^11.4.1",
+    "xo": "^0.18.2"
   }
 }

@@ -1,114 +1,97 @@
-'use strict'
+'use strict';
 
-const Config = require('../lib')
-const expect = require('chai').expect
-const path = require('path')
+const Config = require('../lib');
+const path = require('path');
+const test = require('ava');
 
-describe('Config', function () {
-  let fixture = path.join(__dirname, '.', 'fixtures')
+const fixture = path.join(__dirname, '.', 'fixtures');
 
-  describe('constructor', function () {
-    it('allows being given no configuration', function () {
-      let config = new Config()
+test('new Config() allows being given no configuration', t => {
+  const config = new Config();
 
-      expect(config).to.eql({})
-    })
+  t.deepEqual(config.toJSON(), {});
+});
 
-    it('allows being passed a default configuration', function () {
-      let config = new Config({ some: 'setting' })
+test('new Config() allows being passed a default configuration', t => {
+  const config = new Config({some: 'setting'});
 
-      expect(config).to.eql({
-        some: 'setting'
-      })
-    })
+  t.deepEqual(config.toJSON(), {
+    some: 'setting'
+  });
+});
 
-    it('allows being passed an existing Config instance', function () {
-      let config = Config.load(fixture)
-      let config2 = new Config(config)
+test('new Config() allows being passed an existing Config instance', t => {
+  const config = Config.load(fixture);
+  const config2 = new Config(config);
 
-      expect(config2).to.eql(config)
-    })
-  })
+  t.deepEqual(config2, config);
+});
 
-  describe('.load()', function () {
-    let config
+test('Config.load() loads all of the appropriate config files from the directory', t => {
+  const config = Config.load(fixture);
 
-    it('loads all of the appropriate config files from the directory', function () {
-      config = Config.load(fixture)
+  t.deepEqual(config.toJSON(), {
+    env: 'test',
+    file: 'test.local.js',
+    local: 'loaded',
+    test: 'loaded',
+    default: 'loaded',
+    arrays: ['local'],
+    objects: {
+      default: true,
+      test: true,
+      local: true
+    }
+  });
+});
 
-      expect(config).to.eql({
-        env: 'test',
-        file: 'test.local.js',
-        local: 'loaded',
-        test: 'loaded',
-        default: 'loaded',
-        arrays: ['local'],
-        objects: {
-          default: true,
-          test: true,
-          local: true
-        }
-      })
-    })
+test('Config.load() safely handles being given an invalid config directory', t => {
+  const badConfig = Config.load(path.join(__dirname, '..', 'fixtures', 'bad-config'));
 
-    it('safely handles being given an invalid config directory', function () {
-      let badConfig = Config.load(path.join(__dirname, '..', 'fixtures', 'bad-config'))
+  t.deepEqual(badConfig.toJSON(), {
+    env: 'test'
+  });
+});
 
-      expect(badConfig).to.eql({
-        env: 'test'
-      })
-    })
+test('Config.load() defaults to loading the `development` environment if no NODE_ENV is set', t => {
+  const env = process.env.NODE_ENV;
+  delete process.env.NODE_ENV;
+  const config = Config.load(fixture);
 
-    it('defaults to loading the `development` environment if no NODE_ENV is set', function () {
-      let env = process.env.NODE_ENV
-      delete process.env.NODE_ENV
-      let config = Config.load(fixture)
+  t.is(config.env, 'development');
 
-      expect(config.env).to.equal('development')
+  process.env.NODE_ENV = env;
+});
 
-      process.env.NODE_ENV = env
-    })
-  })
+test('Config.get() returns the value at a given key path', t => {
+  const config = Config.load(fixture);
 
-  describe('#get()', function () {
-    let config
+  t.true(config.get('objects.local'));
+});
 
-    beforeEach(function () {
-      config = Config.load(fixture)
-    })
+test('Config.get() returns undefined if the value is not defined', t => {
+  const config = Config.load(fixture);
 
-    it('returns the value at a given key path', function () {
-      expect(config.get('objects.local')).to.equal(true)
-    })
+  t.falsy(config.get('some.where.over.the.rainbow'));
+});
 
-    it('returns undefined if the value is not defined', function () {
-      expect(config.get('some.where.over.the.rainbow')).to.equal(undefined)
-    })
-  })
+test('Config.set() sets new values', t => {
+  const config = Config.load(fixture);
+  config.set('newValue', 2);
 
-  describe('#set()', function () {
-    let config
+  t.is(config.get('newValue'), 2);
+});
 
-    beforeEach(function () {
-      config = Config.load(fixture)
-    })
+test('Config.set() overwrites existing values at keypaths', t => {
+  const config = Config.load(fixture);
+  config.set('objects.local', 'overwritten');
 
-    it('sets new values', function () {
-      config.set('newValue', 2)
+  t.is(config.get('objects.local'), 'overwritten');
+});
 
-      expect(config.get('newValue')).to.equal(2)
-    })
+test('Config.set() allows setting a deep key path that is not defined', t => {
+  const config = Config.load(fixture);
+  config.set('some.where.over.the.rainbow', 'abc');
 
-    it('overwrites existing values at keypaths', function () {
-      config.set('objects.local', 'overwritten')
-
-      expect(config.get('objects.local')).to.equal('overwritten')
-    })
-
-    it('allows setting a deep key path that is not defined', function () {
-      config.set('some.where.over.the.rainbow', 'abc')
-
-      expect(config.get('some.where.over.the.rainbow')).to.equal('abc')
-    })
-  })
-})
+  t.is(config.get('some.where.over.the.rainbow'), 'abc');
+});

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
   file: 'test.local.js',
@@ -7,4 +7,4 @@ module.exports = {
   objects: {
     local: true
   }
-}
+};
