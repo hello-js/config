@@ -1,7 +1,7 @@
 {
   "name": "hello-config",
   "version": "1.0.1",
-  "description": "Simple environment-specific configuration",
+  "description": "Simple environment-specific configuration for Node.js apps",
   "main": "lib/index.js",
   "repository": "https://github.com/hello-js/hello-config",
   "author": "Matt Venables <mattvenables@gmail.com>",
@@ -13,7 +13,7 @@
     "test": "xo && nyc ava"
   },
   "nyc": {
-    "reporters": [
+    "reporter": [
       "lcov",
       "text"
     ]

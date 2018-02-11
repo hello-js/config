@@ -18,17 +18,22 @@ hello-config loads environment-specific config files from a directory.
 ### Setup
 
 ```js
-const path = require('path');
+/**
+ * config/index.js
+ */
+
 const Config = require('hello-config');
 
-const config = Config.load(path.join(__dirname, 'environments'));
+module.exports = Config.load();
 ```
 
-The above code will load `./environments/default.js` and merge in `./environments/development.js` overrides.
+The above code will load `config/config.js` and merge in contents from `config/development.js` as overrides.
 
-If there is a `./environments/development.local.js` file, this will be merged in as well.
+If there is a `config/development.local.js` file, this will be merged in as well.  You can have a `.local.js` file for any environment.
 
-*NOTE:* `*.local.js` should be added to `.gitignore` -- it should only be used for developer-specific settings
+You can also set local environment variables using a [`.env`](https://github.com/motdotla/dotenv) file the root of your project if you'd like.
+
+*NOTE:* `*.local.js` and `.env` should be added to `.gitignore` -- it should only be used for developer-specific settings
 
 ### Recommended directory structure
 
@@ -36,13 +41,11 @@ The recommended directory structure is
 
 ```
 ./config/
+  config.js
+  development.js
   index.js
-  environments/
-    default.js
-    development.js
-    production.js
-    staging.js
-    test.js
+  production.js
+  test.js
 ```
 
 
@@ -51,13 +54,12 @@ Sample `config/index.js` file:
 ```js
 'use strict';
 
-const path = require('path');
 const Config = require('hello-config');
 
-module.exports = Config.load(path.join(__dirname, 'environments'));
+module.exports = Config.load();
 ```
 
-Sample `default.js` file:
+Sample `config.js` file:
 
 ```js
 'use strict';
@@ -109,4 +111,45 @@ config.does.not.exist;
 
 config.get('does.not.exist');
 // => undefined
+```
+
+### Custom directory structure
+
+You can use any directory structure you prefer. For example, to have a
+structure like the following:
+
+```
+config/
+  index.js
+  environments/
+    all.js
+    development.js
+    production.js
+    test.js
+```
+
+You can use the following options for `Config.load()`:
+
+```
+'use strict';
+
+const path = require('path');
+const Config = require('hello-config');
+
+module.exports = Config.load({
+  root: path.join(__dirname, 'environments'),
+  baseFilename: 'all'
+});
+```
+
+By default, hello-config uses `process.env.NODE_ENV` as the environment, however,
+if you'd like, you can directly load an environment's configuration:
+
+```
+'use strict';
+
+// Loads the test environment:
+Config.load({
+  env: 'test'
+});
 ```
