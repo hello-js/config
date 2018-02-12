@@ -20,7 +20,7 @@ hello-config loads environment-specific config files from a directory.
 The easiest way to get set up is running the following from your command line
 
 ```sh
-hello-config
+yarn hello-config
 ```
 
 This will create a `config` directory that is ready to be required anywhere in your app (`const config = require('../config');`)
