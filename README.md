@@ -7,7 +7,7 @@ Simple environment-specific configuration for your node apps
 
 ## Installation
 
-```
+```sh
 yarn add hello-config
 ```
 
@@ -16,6 +16,18 @@ yarn add hello-config
 hello-config loads environment-specific config files from a directory.
 
 ### Setup
+
+The easiest way to get set up is running the following from your command line
+
+```sh
+hello-config
+```
+
+This will create a `config` directory that is ready to be required anywhere in your app (`const config = require('../config');`)
+
+### Manual Setup
+
+You can also set up `hello-config` manually.
 
 ```js
 /**
