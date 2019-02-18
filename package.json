@@ -1,6 +1,6 @@
 {
   "name": "hello-config",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Simple environment-specific configuration for Node.js apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
