@@ -7,9 +7,11 @@
 # Temp
 tmp
 
-# Node
+# Dependencies
 node_modules
+
+# Build artifcats
+dist
 
 # Coverage
 coverage
-.nyc_output

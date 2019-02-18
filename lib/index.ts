@@ -1,13 +1,16 @@
-'use strict';
+import { config as dotenvConfig } from 'dotenv'
+import { get, merge, omit, set, toPlainObject } from 'lodash'
+import { dirname, join } from 'path'
+import { isString } from 'util'
 
-try {
-  require('dotenv').config({
-    silent: true
-  });
-} catch (err) { }
+// Load from `.env.` file
+dotenvConfig()
 
-const _ = require('lodash');
-const path = require('path');
+interface IConfigOptions {
+  baseFilename?: string
+  env?: string
+  configRoot?: string
+}
 
 /**
  * The environment-specific config loader.
@@ -47,36 +50,35 @@ const path = require('path');
  * config.doesnt.exist
  * // TypeError: Cannot read property 'exist' of undefined
  */
-class Config {
-  constructor(config) {
-    _.merge(this, config);
-  }
-
+export default class Config {
   /**
    * Create a new Config object by loading the configuration from a directory of
    * environment-specific config files
    *
    * @example
    * Config.load(path.join('..', 'config', 'environments'))
-   *
-   * @param {Object} [opts] - The options to the app
-   * @param {String} [opts.root] - The environment-specific config directory (Default: '.')
-   * @param {String} [opts.baseFilename] - The base configuration filename (Default: 'config')
-   * @param {String} [opts.env] - The environment to use (default: process.env.NODE_ENV, or 'development')
-   * @returns {Config} - A populated Config object
    */
-  static load(opts = {}) {
-    const baseFilename = opts.baseFilename || 'config';
-    const env = opts.env || process.env.NODE_ENV || 'development';
-    const root = opts.root || _parentPath();
+  public static load(opts: IConfigOptions | string = {}) {
+    if (isString(opts)) {
+      opts = { configRoot: opts }
+    }
 
-    const defaultConfig = _safeLoad(path.join(root, baseFilename));
-    const envConfig = _safeLoad(path.join(root, env));
-    const localConfig = _safeLoad(path.join(root, env + '.local'));
+    const baseFilename = opts.baseFilename || 'default'
+    const env = opts.env || process.env.NODE_ENV || 'development'
+    const configRoot = opts.configRoot || parentPath()
 
-    return new Config(_.merge({}, defaultConfig, envConfig, localConfig, {
-      env
-    }));
+    const defaultConfig = safeRequire(join(configRoot, baseFilename))
+    const envConfig = safeRequire(join(configRoot, env))
+    const localConfig = safeRequire(join(configRoot, env + '.local'))
+
+    return new Config(merge({}, defaultConfig, envConfig, localConfig, { env }))
+  }
+
+  [key: string]: any
+  public env?: string
+
+  constructor(config: Config | object = {}) {
+    merge(this, config)
   }
 
   /**
@@ -91,12 +93,9 @@ class Config {
    * config.get('logging.json')
    * // is the equivalent of:
    * // config.logging && config.logging.json
-   *
-   * @param {String} keyPath - The key (or key path) to access
-   * @returns {Any} - The config value, if any, otherwise `undefined`
    */
-  get(keyPath) {
-    return _.get(this, keyPath);
+  public get(keyPath: string) {
+    return get(this, keyPath)
   }
 
   /**
@@ -110,13 +109,9 @@ class Config {
    * config.set('logging.json', 2)
    * // is the equivalent of:
    * // Object.assign(config.logging, { json: 2 })
-   *
-   * @param {String} keyPath - The key (or key path) to set
-   * @param {Any} value - The value to set
-   * @returns {Any} - The config value
    */
-  set(keyPath, value) {
-    return _.set(this, keyPath, value);
+  public set(keyPath: string, value: any) {
+    return set(this, keyPath, value)
   }
 
   /**
@@ -126,11 +121,9 @@ class Config {
    * in tests.
    *
    * You likely do not need to use this method
-   *
-   * @returns {Object}
    */
-  toJSON() {
-    return _.toPlainObject(this);
+  public toJSON() {
+    return omit(toPlainObject(this), ['get', 'set', 'toJSON'])
   }
 }
 
@@ -138,14 +131,17 @@ class Config {
  * @private
  *
  * Load a file, handling any errors
- *
- * @returns {Object} the contents of the file, falling back to an empty object
  */
-function _safeLoad(file) {
+function safeRequire(file: string) {
   try {
-    return require(file);
+    const config = require(file)
+    if (Object.keys(config).length === 1 && config.default) {
+      return config.default
+    }
+
+    return config
   } catch (err) {
-    return {};
+    return {}
   }
 }
 
@@ -154,11 +150,7 @@ function _safeLoad(file) {
  *
  * Determine the path of the module's parent (the calling module) to
  * assist in auto-generating the config path
- *
- * @returns {String} - The path of the config directory
  */
-function _parentPath() {
-  return path.dirname(module.parent.filename);
+function parentPath() {
+  return dirname(module!.parent!.filename)
 }
-
-module.exports = Config;

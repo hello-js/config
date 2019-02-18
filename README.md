@@ -23,7 +23,7 @@ The easiest way to get set up is running the following from your command line
 yarn hello-config
 ```
 
-This will create a `config` directory that is ready to be required anywhere in your app (`const config = require('../config');`)
+This will create a `config` directory that is ready to be required anywhere in your app (`const config = require('./config');`)
 
 ### Manual Setup
 
@@ -34,18 +34,25 @@ You can also set up `hello-config` manually.
  * config/index.js
  */
 
-const Config = require('hello-config');
+const Config = require('hello-config')
 
-module.exports = Config.load();
+module.exports = Config.load()
 ```
 
-The above code will load `config/config.js` and merge in contents from `config/development.js` as overrides.
+```typescript
+// Or as typescript:
+import { load } from 'hello-config'
 
-If there is a `config/development.local.js` file, this will be merged in as well.  You can have a `.local.js` file for any environment.
+export default load()
+```
+
+The above code will load `config/default.js` and merge in contents from `config/development.js` as overrides.
+
+If there is a `config/development.local.js` file, this will be merged in as well. You can have a `.local.js` file for any environment.
 
 You can also set local environment variables using a [`.env`](https://github.com/motdotla/dotenv) file the root of your project if you'd like.
 
-*NOTE:* `*.local.js` and `.env` should be added to `.gitignore` -- it should only be used for developer-specific settings
+_NOTE:_ `*.local.js` and `.env` should be added to `.gitignore` -- it should only be used for developer-specific settings
 
 ### Recommended directory structure
 
@@ -53,29 +60,24 @@ The recommended directory structure is
 
 ```
 ./config/
-  config.js
+  default.js
   development.js
   index.js
   production.js
   test.js
 ```
 
-
 Sample `config/index.js` file:
 
 ```js
-'use strict';
+const Config = require('hello-config')
 
-const Config = require('hello-config');
-
-module.exports = Config.load();
+module.exports = Config.load()
 ```
 
-Sample `config.js` file:
+Sample `default.js` file:
 
 ```js
-'use strict';
-
 module.exports = {
   port: process.env.PORT || 80,
 
@@ -84,21 +86,19 @@ module.exports = {
     username: 'matt'
     // ...
   }
-};
+}
 ```
 
 Sample `development.js` file:
 
 ```js
-'use strict'
-
 module.exports = {
   port: 3000,
 
   db: {
     host: '127.0.0.1'
   }
-};
+}
 ```
 
 At this point, you can run the following code:
@@ -142,26 +142,22 @@ config/
 
 You can use the following options for `Config.load()`:
 
-```
-'use strict';
-
-const path = require('path');
-const Config = require('hello-config');
+```js
+const path = require('path')
+const Config = require('hello-config')
 
 module.exports = Config.load({
   root: path.join(__dirname, 'environments'),
   baseFilename: 'all'
-});
+})
 ```
 
 By default, hello-config uses `process.env.NODE_ENV` as the environment, however,
 if you'd like, you can directly load an environment's configuration:
 
-```
-'use strict';
-
+```js
 // Loads the test environment:
 Config.load({
   env: 'test'
-});
+})
 ```

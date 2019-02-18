@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   file: 'test.js',
   test: 'loaded',
@@ -7,4 +5,4 @@ module.exports = {
   objects: {
     test: true
   }
-};
+}

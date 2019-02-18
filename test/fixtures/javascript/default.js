@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   file: 'default.js',
   default: 'loaded',
@@ -7,4 +5,4 @@ module.exports = {
   objects: {
     default: true
   }
-};
+}

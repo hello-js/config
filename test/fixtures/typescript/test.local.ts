@@ -1,10 +1,8 @@
-'use strict';
-
-module.exports = {
+export default {
+  arrays: ['local'],
   file: 'test.local.js',
   local: 'loaded',
-  arrays: ['local'],
   objects: {
     local: true
   }
-};
+}

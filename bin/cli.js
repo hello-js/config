@@ -1,27 +1,25 @@
 #!/usr/bin/env node
 
-'use strict';
+const fs = require('fs')
+const path = require('path')
+const configFiles = ['default', 'development', 'production', 'test']
 
-const fs = require('fs');
-const path = require('path');
-
-const template = `'use strict';
-
-module.exports = {
+const template = `module.exports = {
 
 };
-`;
+`
 
-fs.mkdirSync(path.join('.', 'config'));
-fs.writeFileSync('./config/index.js', `'use strict';
-
-const Config = require('hello-config');
+fs.mkdirSync(path.join('.', 'config'))
+fs.writeFileSync(
+  './config/index.js',
+  `const Config = require('hello-config');
 
 module.exports = Config.load();
-`);
+`
+)
 
-['config', 'development', 'production', 'test'].forEach(env => {
-  fs.writeFileSync(path.join('.', 'config', `${env}.js`), template);
-});
+configFiles.forEach(env => {
+  fs.writeFileSync(path.join('.', 'config', `${env}.js`), template)
+})
 
-process.exit(0);
+process.exit(0)
