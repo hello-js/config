@@ -34,7 +34,7 @@ You can also set up `hello-config` manually.
  * config/index.js
  */
 
-const Config = require('hello-config')
+const Config = require('hello-config').default
 
 module.exports = Config.load()
 ```
@@ -70,7 +70,7 @@ The recommended directory structure is
 Sample `config/index.js` file:
 
 ```js
-const Config = require('hello-config')
+const Config = require('hello-config').default
 
 module.exports = Config.load()
 ```
@@ -144,7 +144,7 @@ You can use the following options for `Config.load()`:
 
 ```js
 const path = require('path')
-const Config = require('hello-config')
+const Config = require('hello-config').default
 
 module.exports = Config.load({
   root: path.join(__dirname, 'environments'),

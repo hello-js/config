@@ -12,7 +12,7 @@ const template = `module.exports = {
 fs.mkdirSync(path.join('.', 'config'))
 fs.writeFileSync(
   './config/index.js',
-  `const Config = require('hello-config');
+  `const Config = require('hello-config').default;
 
 module.exports = Config.load();
 `
