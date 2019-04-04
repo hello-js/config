@@ -1,11 +1,11 @@
 {
-  "name": "hello-config",
-  "version": "3.0.1",
+  "name": "@hello/config",
+  "version": "3.0.2",
   "description": "Simple environment-specific configuration for Node.js apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": "bin/cli.js",
-  "repository": "https://github.com/hello-js/hello-config",
+  "repository": "https://github.com/hello-js/config",
   "author": "Matt Venables <mattvenables@gmail.com>",
   "license": "MIT",
   "scripts": {

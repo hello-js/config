@@ -1,47 +1,47 @@
-# hello-config
+# @hello/config
 
 Simple environment-specific configuration for your node apps
 
-[![Build Status](https://img.shields.io/travis/hello-js/hello-config/master.svg)](https://travis-ci.org/hello-js/hello-config)
-[![Coverage Status](https://img.shields.io/coveralls/hello-js/hello-config.svg)](https://coveralls.io/github/hello-js/hello-config)
+[![Build Status](https://img.shields.io/travis/hello-js/config/master.svg)](https://travis-ci.org/hello-js/ config)
+[![Coverage Status](https://img.shields.io/coveralls/hello-js/config.svg)](https://coveralls.io/github/hello-js/config)
 
 ## Installation
 
 ```sh
-yarn add hello-config
+yarn add @hello/config
 ```
 
 ## Usage
 
-hello-config loads environment-specific config files from a directory.
+@hello/config loads environment-specific config files from a directory.
 
 ### Setup
 
 The easiest way to get set up is running the following from your command line
 
 ```sh
-yarn hello-config
+yarn @hello/config
 ```
 
 This will create a `config` directory that is ready to be required anywhere in your app (`const config = require('./config');`)
 
 ### Manual Setup
 
-You can also set up `hello-config` manually.
+You can also set up `@hello/config` manually.
 
 ```js
 /**
  * config/index.js
  */
 
-const Config = require('hello-config').default
+const Config = require('@hello/config').default
 
 module.exports = Config.load()
 ```
 
 ```typescript
 // Or as typescript:
-import { load } from 'hello-config'
+import { load } from '@hello/config'
 
 export default load()
 ```
@@ -70,7 +70,7 @@ The recommended directory structure is
 Sample `config/index.js` file:
 
 ```js
-const Config = require('hello-config').default
+const Config = require('@hello/config').default
 
 module.exports = Config.load()
 ```
@@ -144,7 +144,7 @@ You can use the following options for `Config.load()`:
 
 ```js
 const path = require('path')
-const Config = require('hello-config').default
+const Config = require('@hello/config').default
 
 module.exports = Config.load({
   root: path.join(__dirname, 'environments'),
@@ -152,7 +152,7 @@ module.exports = Config.load({
 })
 ```
 
-By default, hello-config uses `process.env.NODE_ENV` as the environment, however,
+By default, @hello/config uses `process.env.NODE_ENV` as the environment, however,
 if you'd like, you can directly load an environment's configuration:
 
 ```js
